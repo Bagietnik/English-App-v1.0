@@ -3,11 +3,21 @@
 #include <DB.h>
 #include <Menu.h>
 
+enum class GameStage {
+    Init,
+    MainMenu,
+    Start,
+    Settings,
+};
+
 class App
 {
     public:
         App();
-        void MainMenuChoice();
+        void SetGameStage(GameStage stage);
+        void Action();
     private:
-        uint8_t action;
+        int action;
+        GameStage currentStage;
+        Menu menu;
 };
