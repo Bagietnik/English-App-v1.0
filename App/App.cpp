@@ -3,7 +3,7 @@
 App::App()
 {
 
-    DB database("192.168.1.21", "piotrek", "4Fa7876c");
+    DB database("192.168.1.21", "piotrek", "XXX");
     if (database.isConnected())
     {
         Menu menu;
