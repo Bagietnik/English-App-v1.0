@@ -19,7 +19,7 @@ void DB::openConnection()
         _con = _driver->connect("tcp://" + _host + ":3306", _user, _password);
         if (_con->isValid())
         {
-            std::cout << "Successfully connected to the database." << std::endl;
+            std::cout << "Successfully connected to the database.\n" << std::endl;
         }
         else
         {
@@ -83,5 +83,10 @@ void DB::showWords()
     {
         std::cerr << "Database query error: " << e.what() << std::endl;
     }
+}
+
+bool DB::isConnected() const
+{
+    return (_con != nullptr && _con->isValid() && !_con->isClosed());
 }
 

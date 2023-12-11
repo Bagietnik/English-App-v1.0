@@ -15,6 +15,7 @@ public:
 
     void showDBs();
     void showWords();
+    bool isConnected() const;
 
 private:
     std::string _host;
