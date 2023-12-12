@@ -2,6 +2,7 @@
 
 std::map<int, std::string> Menu::MainMenu;
 std::map<int, std::string> Menu::SettiingsMenu;
+std::map<int, std::string> Menu::BackMenu;
 
 Menu::Menu() {
     MainMenu[1] = "1. Start";
@@ -11,5 +12,12 @@ Menu::Menu() {
     SettiingsMenu[1] = "1. Add a new word";
     SettiingsMenu[2] = "2. Remove a word";
     SettiingsMenu[3] = "3. List all the words";
-    SettiingsMenu[4] = "4. Exit";
+    SettiingsMenu[4] = "4. Back";
+
+    BackMenu[1] = "1. Back";
+}
+
+void Menu::provideNewWord()
+{
+
 }

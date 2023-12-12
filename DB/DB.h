@@ -5,7 +5,7 @@
 #include <cppconn/driver.h>
 #include <cppconn/statement.h>
 #include <cppconn/resultset.h>
-
+#include <iomanip>
 
 class DB 
 {
@@ -15,6 +15,8 @@ public:
 
     void showDBs();
     void showWords();
+    void addWord();
+    void removeWord();
     bool isConnected() const;
 
 private:

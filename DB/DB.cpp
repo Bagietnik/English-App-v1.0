@@ -61,21 +61,25 @@ void DB::showWords()
         sql::ResultSetMetaData *metaData = res->getMetaData();
         int numColumns = metaData->getColumnCount();
 
+        std::cout << "\n*******************************************************************************************" << '\n';
+
+    for (int i = 1; i <= numColumns; ++i)
+    {
+        std::cout << std::setw(15) << std::left << metaData->getColumnName(i);
+    }
+    std::cout << '\n';
+    std::cout << std::endl;
+
+    while (res->next())
+    {
         for (int i = 1; i <= numColumns; ++i)
         {
-            std::cout << metaData->getColumnName(i) << "\t";
+            std::cout << std::setw(15) << std::left << res->getString(i);
         }
         std::cout << std::endl;
+    }
 
-        while (res->next())
-        {
-            for (int i = 1; i <= numColumns; ++i)
-            {
-                std::cout << res->getString(i) << "\t";
-            }
-            std::cout << std::endl;
-        }
-
+    std::cout << "\n*******************************************************************************************" << '\n';
         delete res;
         delete stmt;
     }
@@ -90,3 +94,18 @@ bool DB::isConnected() const
     return (_con != nullptr && _con->isValid() && !_con->isClosed());
 }
 
+void DB::addWord()
+{
+    if (!_con || _con->isClosed())
+    {
+        std::cerr << "Error: Database connection is not open." << std::endl;
+        return;
+    }else{
+        ;
+    }
+}
+
+void DB::removeWord()
+{
+    ;
+}
