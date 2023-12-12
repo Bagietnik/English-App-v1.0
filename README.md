@@ -22,7 +22,7 @@
 
 12.12.2023
 
-Menu development
+- Menu development
 
 Main menu:
 
