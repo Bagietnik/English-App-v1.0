@@ -1,7 +1,7 @@
 #include <DB.h>
 
 DB::DB(const std::string &host, const std::string &user, const std::string &password)
-        : _host(host), _user(user), _password(password), _con(nullptr)
+        : _host(host), _user(user), _password(password), _con(nullptr), _driver(_driver = sql::mysql::get_mysql_driver_instance())
 {
     openConnection();
 }
@@ -15,7 +15,6 @@ void DB::openConnection()
 {
     try
     {
-        _driver = sql::mysql::get_mysql_driver_instance();
         _con = _driver->connect("tcp://" + _host + ":3306", _user, _password);
         if (_con->isValid())
         {
@@ -40,7 +39,7 @@ void DB::closeConnection()
     }
 }
 
-void DB::showWords()
+void DB::showWords() const
 {
     if (!_con || _con->isClosed())
     {
@@ -94,18 +93,83 @@ bool DB::isConnected() const
     return (_con != nullptr && _con->isValid() && !_con->isClosed());
 }
 
-void DB::addWord()
+void DB::addWord(const std::string &name, const std::string &translation, const std::string &category, const std::string &level)
 {
     if (!_con || _con->isClosed())
     {
         std::cerr << "Error: Database connection is not open." << std::endl;
         return;
-    }else{
-        ;
+    }
+
+    try
+    {
+        _con->setSchema("the_game");
+
+        sql::PreparedStatement *prepStmt;
+        prepStmt = _con->prepareStatement("INSERT INTO words (word, translation, category, level) VALUES (?, ?, ?, ?)");
+
+        prepStmt->setString(1, name);
+        prepStmt->setString(2, translation);
+        prepStmt->setString(3, category);
+        prepStmt->setString(4, level);
+
+        prepStmt->executeUpdate();
+
+        system("clear");
+        std::cout << "Word added successfully!" << std::endl;
+
+        delete prepStmt;
+    }
+    catch (sql::SQLException &e)
+    {
+        std::cerr << "Database query error: " << e.what() << std::endl;
     }
 }
 
-void DB::removeWord()
+void DB::removeWord(const std::string &name)
 {
-    ;
+    if (!_con || _con->isClosed())
+    {
+        std::cerr << "Error: Database connection is not open." << std::endl;
+        return;
+    }
+
+    try
+    {
+        _con->setSchema("the_game");
+
+        sql::PreparedStatement *checkStmt;
+        checkStmt = _con->prepareStatement("SELECT COUNT(*) FROM words WHERE word = ?");
+        checkStmt->setString(1, name);
+        sql::ResultSet *result = checkStmt->executeQuery();
+
+        int rowCount = 0;
+        if (result->next())
+        {
+            rowCount = result->getInt(1);
+        }
+
+        delete checkStmt;
+
+        if (rowCount == 0)
+        {
+            system("clear");
+            std::cerr << "Error: Word '" << name << "' does not exist in the database." << std::endl;
+            return;
+        }
+
+        sql::PreparedStatement *prepStmt;
+        prepStmt = _con->prepareStatement("DELETE FROM words WHERE word = ?");
+        prepStmt->setString(1, name);
+        prepStmt->executeUpdate();
+
+        system("clear");
+        std::cout << "Word removed successfully!" << std::endl;
+
+        delete prepStmt;
+    }
+    catch (sql::SQLException &e)
+    {
+        std::cerr << "Database query error: " << e.what() << std::endl;
+    }
 }

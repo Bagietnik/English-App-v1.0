@@ -1,5 +1,3 @@
-#pragma once
-
 #include <DB.h>
 #include <Menu.h>
 #include <cstdlib>
@@ -17,6 +15,7 @@ enum class GameStage {
     Start,
     Settings,
     AddNewWord,
+    RemoveWord,
     ListWords,
 };
 
@@ -26,6 +25,13 @@ class App
         App();
         void SetGameStage(GameStage stage);
         void Action();
+        void Init();
+        void Settings();
+        void ListWords();
+        void RemoveWord();
+        void AddWord();
+        bool validateInput(std::string& input, const std::string& fieldName);
+        bool validateAction();
     private:
         int action;
         GameStage currentStage;
